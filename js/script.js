@@ -15,7 +15,7 @@ window.addEventListener('load', function(){
                 mensajeError.style.visibility = 'hidden';
             }, 2000)
         } else if (campoNombre.value === 'fede'){
-            document.location.href = 'player1.html';
+            document.location.href = 'app.html';
         } else {
             document.location.href = 'player2.html';
         }

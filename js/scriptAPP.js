@@ -51,7 +51,16 @@ window.addEventListener('load', function(){
     var preguntasRespondidas = [];
     var respuestaBuena = ' ';
     contador.addEventListener('click', countdown);
+
+    const marcadorPlayer1 = document.getElementById('puntosP1');
+    const marcadorPlayer2 = document.getElementById('puntosP2');
+    var puntosPlayer1 = 0;
+    var puntosPlayer2 = 0;
     
+    var turnos = 0;
+    var finPartida = 4;
+    var cambioTurno = finPartida/2;
+
     respuesta1.addEventListener('click', comprobarRespuesta);
     respuesta2.addEventListener('click', comprobarRespuesta);
     respuesta3.addEventListener('click', comprobarRespuesta);
@@ -64,6 +73,7 @@ window.addEventListener('load', function(){
         contador.classList.remove('contadorSinPulsar');
         contador.classList.add('contadorPulsado');
         contador.textContent = valorContador;
+
 
     let intervalo = setInterval(function(){
             valorContador--;
@@ -80,9 +90,6 @@ window.addEventListener('load', function(){
     function cambiaPregunta(){
         let posicion = Math.floor(Math.random() * (preguntas.length));
 
-        if(contiene(preguntasRespondidas, posicion)) {
-            cambiaPregunta
-        } else {
             pregunta.innerHTML = preguntas[posicion].pregunta;
             respuesta1.innerHTML = preguntas[posicion].respuesta1;
             respuesta2.innerHTML = preguntas[posicion].respuesta2;
@@ -90,23 +97,53 @@ window.addEventListener('load', function(){
             respuesta4.innerHTML = preguntas[posicion].respuesta4;
             respuestaBuena = preguntas[posicion].respuestaCorrecta;
             preguntasRespondidas.push(posicion);
-        }
+
+            preguntas.splice(posicion,1);
 
     }
 
 
 
     function comprobarRespuesta(e){
-        if (e.target.id == respuestaBuena) e.target.classList.add('respuestaCorrecta');
-        else e.target.classList.add('respuestaIncorrecta');
+        if (e.target.id == respuestaBuena) {
+            e.target.classList.add('respuestaCorrecta');
 
-        setTimeout(() => {
-            e.target.className = 'respuesta';
-            cambiaPregunta();
-        }, 2000);
+            if(turnos < cambioTurno) {
+                puntosPlayer1++;
+                marcadorPlayer1.innerHTML = puntosPlayer1;
+            } else {
+                puntosPlayer2++;
+                marcadorPlayer2.innerHTML = puntosPlayer2;
+            }
+
+        }else e.target.classList.add('respuestaIncorrecta');
+
+        
+        turnos++;
+        if(turnos == cambioTurno) document.getElementById('turno').innerHTML = 'Player 2';
+
+        
+        if (turnos == finPartida) terminarPartida();
+        else {
+            setTimeout(() => {
+                e.target.className = 'respuesta';
+                cambiaPregunta();
+            }, 2000);
+        }
+        
     }
     
+    function terminarPartida() {
+        let ganador;
+            if (puntosPlayer1 > puntosPlayer2) ganador = 'Ganador player 1';
+            else if (puntosPlayer1 < puntosPlayer2) ganador = 'Ganador player 2';
+            else ganador = 'empate';
 
+            contenedor.style.visibility = 'hidden';
+            let span = document.createElement('span');
+            span.innerHTML = ganador;
+            document.querySelector('body').appendChild(span);
+    }
 
 
 
