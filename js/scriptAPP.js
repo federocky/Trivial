@@ -43,6 +43,8 @@ window.addEventListener('load', function(){
 
     const contenedor = document.querySelector('#contenedor');
 
+    const barraTiempo = document.querySelector('#barraProgreso > div');
+    
     const pregunta = document.getElementById('pregunta');
     const respuesta1 = document.getElementById('respuesta1');
     const respuesta2 = document.getElementById('respuesta2');
@@ -88,6 +90,8 @@ window.addEventListener('load', function(){
     }
 
     function cambiaPregunta(){
+        barraTiempo.style.display = 'flex';
+
         let posicion = Math.floor(Math.random() * (preguntas.length));
 
             pregunta.innerHTML = preguntas[posicion].pregunta;
@@ -105,6 +109,8 @@ window.addEventListener('load', function(){
 
 
     function comprobarRespuesta(e){
+        barraTiempo.style.display = 'none';
+
         if (e.target.id == respuestaBuena) {
             e.target.classList.add('respuestaCorrecta');
 
