@@ -44,12 +44,12 @@ body {
 
 .contador {
     font-size: 50px;
+    text-align: center;
 }
 
 #contenedor {
     position: relative;
-    visibility: hidden;
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -131,8 +131,10 @@ body {
 
 }
 
-.contenedorRespuesta {
+#contenedorRespuestas {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
  .respuesta {
@@ -141,16 +143,13 @@ body {
     background-image: radial-gradient(rgb(241, 234, 234), rgb(31, 88, 211));
     border-radius: 15px;
     box-shadow: 2px 2px 5px black;
-    float: left;
     margin-left: 20px;
     margin-bottom: 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
 }
 
 @media (max-width: 450px) {

@@ -70,6 +70,9 @@ window.addEventListener('load', function(){
     respuesta3.addEventListener('click', comprobarRespuesta);
     respuesta4.addEventListener('click', comprobarRespuesta);
 
+
+    var tiempoRespuesta;
+
     /**
      * Cuenta atras al entrar que inicia la partida
      */
@@ -87,7 +90,7 @@ window.addEventListener('load', function(){
                 contador.textContent = 'Turno del player 1'
                 setTimeout(() => {
                     contenedorBoton.style.display = 'none';
-                    contenedor.style.visibility = 'visible';
+                    contenedor.style.display = 'flex';
                     cambiaPregunta();
                 }, 2000);
             }
@@ -105,24 +108,25 @@ window.addEventListener('load', function(){
 
         let posicion = Math.floor(Math.random() * (preguntas.length)); //Genero el numero random que sera la posicion de la pregunta
 
-            pregunta.innerHTML = preguntas[posicion].pregunta;
-            respuesta1.innerHTML = preguntas[posicion].respuesta1;
-            respuesta2.innerHTML = preguntas[posicion].respuesta2;
-            respuesta3.innerHTML = preguntas[posicion].respuesta3;
-            respuesta4.innerHTML = preguntas[posicion].respuesta4;
-            respuestaBuena = preguntas[posicion].respuestaCorrecta; //esta es la respuesta correcta
-            //preguntasRespondidas.push(posicion);
+        pregunta.innerHTML = preguntas[posicion].pregunta;
+        respuesta1.innerHTML = preguntas[posicion].respuesta1;
+        respuesta2.innerHTML = preguntas[posicion].respuesta2;
+        respuesta3.innerHTML = preguntas[posicion].respuesta3;
+        respuesta4.innerHTML = preguntas[posicion].respuesta4;
+        respuestaBuena = preguntas[posicion].respuestaCorrecta; //esta es la respuesta correcta
+        //preguntasRespondidas.push(posicion);
 
-            preguntas.splice(posicion,1); //eliminamos la pregunta del array
-            
+        preguntas.splice(posicion,1); //eliminamos la pregunta del array
+        
 
-            var tiempoRespuesta = setInterval(() => {
-                tiempo--;
-                if (tiempo == 0) {
-                    comprobarQueHacer();
-                    clearInterval(tiempoRespuesta);
-                }
-            }, 1000);
+        tiempoRespuesta = setInterval(() => {
+            tiempo--;
+            console.log(tiempo);
+            if (tiempo == 0) {
+                comprobarQueHacer(false);
+                clearInterval(tiempoRespuesta);
+            }
+        }, 1000);
 
     }
 
@@ -134,6 +138,8 @@ window.addEventListener('load', function(){
      */
     function comprobarRespuesta(e){
         //barraTiempo.style.display = 'none'; //quitamos la barra de tiempo
+        let acierto = true; 
+        clearInterval(tiempoRespuesta);
 
         if (e.target.id == respuestaBuena) {
             e.target.classList.add('respuestaCorrecta');
@@ -147,22 +153,22 @@ window.addEventListener('load', function(){
                 marcadorPlayer2.innerHTML = puntosPlayer2;
             }
 
-        }else {
+        } else {
+            acierto = false;
             e.target.classList.add('respuestaIncorrecta');
-            for (const elemento of respuestas) {
-                if (elemento.id == respuestaBuena) elemento.classList.add('respuestaCorrecta');
-            }
         }
     
-        comprobarQueHacer();
+        comprobarQueHacer(acierto);
     }
 
-    function comprobarQueHacer() {
+    function comprobarQueHacer(acierto) {
         turnos++;
         barraTiempo.style.display = 'none'; //quitamos la barra de tiempo
         
-        for (const elemento of respuestas) {
-            if (elemento.id == respuestaBuena) elemento.classList.add('respuestaCorrecta');
+        if (!acierto) {
+            for (const elemento of respuestas) {
+                if (elemento.id == respuestaBuena) elemento.classList.add('respuestaCorrecta');
+            }
         }
 
         if (turnos == finPartida) terminarPartida();
@@ -181,11 +187,11 @@ window.addEventListener('load', function(){
             //e.target.className = 'respuesta'; //quitamos la clase de respuesta correcta o incorrecta
             quitarClase(); //quitamos la clase de correcta o incorrecta
             document.getElementById('turno').innerHTML = 'Player 2';
-            contenedor.style.visibility = 'hidden';
+            contenedor.style.display = 'none';
             contador.textContent = 'Turno del player 2' //avisamos que comienza el turno del player 2. 
             contenedorBoton.style.display = 'flex';
             setTimeout(() => {
-                contenedor.style.visibility = 'visible';
+                contenedor.style.display = 'flex';
                 contenedorBoton.style.display = 'none';
                 cambiaPregunta();
             }, 3300);
@@ -204,7 +210,7 @@ window.addEventListener('load', function(){
             else ganador = 'empate';
 
             setTimeout(() => {
-                contenedor.style.visibility = 'hidden';
+                contenedor.style.display = 'none';
                 contador.textContent = ganador;
                 contenedorBoton.style.display = 'flex';
             }, 1000);
